@@ -36,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.0"
+  cloud_firestore:
+    dependency: "direct main"
+    description:
+      name: cloud_firestore
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.9.13+1"
   collection:
     dependency: transitive
     description:
@@ -50,6 +57,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2"
+  firebase_core:
+    dependency: transitive
+    description:
+      name: firebase_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.4"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -179,3 +193,4 @@ packages:
     version: "2.0.8"
 sdks:
   dart: ">=2.1.0 <3.0.0"
+  flutter: ">=1.2.0 <2.0.0"
