@@ -58,10 +58,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        child: Hero(
-          tag: "add_button",
-          child: Icon(Icons.add),
-        ),
+        child: Icon(Icons.add),
         onPressed: () {
           Navigator.of(context).pushNamed('/add');
         },
