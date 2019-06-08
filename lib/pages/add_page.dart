@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:como_gasto/category_selection_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+
+import '../login_state.dart';
 
 class AddPage extends StatefulWidget {
   @override
@@ -182,8 +185,11 @@ class _AddPageState extends State<AddPage> {
               ),
             ),
             onPressed: () {
+              var user = Provider.of<LoginState>(context).currentUser();
               if (value > 0 && category != "") {
                 Firestore.instance
+                    .collection('users')
+                    .document(user.uid)
                     .collection('expenses')
                     .document()
                 .setData({
