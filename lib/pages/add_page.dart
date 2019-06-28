@@ -7,51 +7,101 @@ import 'package:provider/provider.dart';
 import '../login_state.dart';
 
 class AddPage extends StatefulWidget {
+  final Rect buttonRect;
+
+  const AddPage({Key key, this.buttonRect}) : super(key: key);
+
   @override
   _AddPageState createState() => _AddPageState();
 }
 
-class _AddPageState extends State<AddPage> {
+class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+  Animation _buttonAnimation;
+  Animation _pageAnimation;
+
   String category;
   int value = 0;
 
   @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 750),
+    );
+
+    _buttonAnimation = Tween<double>(begin: 0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn)
+    );
+
+    _pageAnimation = Tween<double>(begin: -1, end: 1.0).animate(
+        CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn)
+    );
+
+    _controller.addListener(() {
+      print(_controller.value);
+      setState(() {});
+    });
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.dismissed) {
+        Navigator.of(context).pop();
+      }
+    });
+
+    _controller.forward();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        title: Text(
-          "Category",
-          style: TextStyle(
-            color: Colors.grey,
+    var h = MediaQuery.of(context).size.height;
+    return Stack(
+      children: [
+        Transform.translate(
+          offset: Offset(0, h * (1 - _pageAnimation.value)),
+          child: Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.transparent,
+              elevation: 0.0,
+              title: Text(
+                "Category",
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
+              centerTitle: false,
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    _controller.reverse();
+                  },
+                )
+              ],
+            ),
+            body: _body(),
           ),
         ),
-        centerTitle: false,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.close,
-              color: Colors.grey,
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          )
-        ],
-      ),
-      body: _body(),
+        _submit(),
+      ],
     );
   }
 
   Widget _body() {
+    var h = MediaQuery.of(context).size.height;
     return Column(
       children: <Widget>[
         _categorySelector(),
         _currentValue(),
         _numpad(),
-        _submit(),
+        SizedBox(
+          height: h - widget.buttonRect.top,
+        )
       ],
     );
   }
@@ -169,45 +219,81 @@ class _AddPageState extends State<AddPage> {
   }
 
   Widget _submit() {
-    return Builder(builder: (BuildContext context) {
-      return Hero(
-        tag: "add_button",
-        child: Container(
-          height: 50.0,
-          width: double.infinity,
-          decoration: BoxDecoration(color: Colors.blueAccent),
-          child: MaterialButton(
-            child: Text(
-              "Add expense",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20.0,
+    if (_controller.value < 1) {
+        var buttonWidth = widget.buttonRect.right - widget.buttonRect.left;
+        var w = MediaQuery.of(context).size.width;
+
+        return Positioned(
+          left: widget.buttonRect.left * (1 - _buttonAnimation.value),
+          //<-- Margin from left
+          right: (w - widget.buttonRect.right) * (1 - _buttonAnimation.value),
+          //<-- Margin from right
+          top: widget.buttonRect.top,
+          //<-- Margin from top
+          bottom: (MediaQuery.of(context).size.height - widget.buttonRect.bottom) *
+              (1 - _buttonAnimation.value),
+          //<-- Margin from bottom
+          child: Container(
+            width: double.infinity,
+            //<-- Blue cirle
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(
+                  buttonWidth * (1 - _buttonAnimation.value)),
+              color: Colors.blueAccent,
+            ),
+            child: MaterialButton(
+              child: Text(
+                "Add expense",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                ),
               ),
             ),
-            onPressed: () {
-              var user = Provider.of<LoginState>(context).currentUser();
-              if (value > 0 && category != "") {
-                Firestore.instance
-                    .collection('users')
-                    .document(user.uid)
-                    .collection('expenses')
-                    .document()
-                .setData({
-                  "category": category,
-                  "value": value / 100.0,
-                  "month": DateTime.now().month,
-                  "day": DateTime.now().day,
-                });
-
-                Navigator.of(context).pop();
-              } else {
-                Scaffold.of(context).showSnackBar(
-                    SnackBar(content: Text("Select a value and a cagtegory")));
-              }
-            },
           ),
-        ),
+        );
+    } else {
+      return Positioned(
+        top: widget.buttonRect.top,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        child: Builder(builder: (BuildContext context) {
+          return Container(
+            decoration: BoxDecoration(color: Colors.blueAccent),
+            child: MaterialButton(
+              child: Text(
+                "Add expense",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                ),
+              ),
+              onPressed: () {
+                var user = Provider.of<LoginState>(context).currentUser();
+                if (value > 0 && category != "") {
+                  Firestore.instance
+                      .collection('users')
+                      .document(user.uid)
+                      .collection('expenses')
+                      .document()
+                      .setData({
+                    "category": category,
+                    "value": value / 100.0,
+                    "month": DateTime.now().month,
+                    "day": DateTime.now().day,
+                  });
+
+                  Navigator.of(context).pop();
+                } else {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text("Select a value and a cagtegory")));
+                }
+              },
+            ),
+          );
+        }),
       );
-    });
+    }
   }
 }

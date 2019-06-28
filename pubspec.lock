@@ -151,6 +151,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  rect_getter:
+    dependency: "direct main"
+    description:
+      name: rect_getter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   shared_preferences:
     dependency: "direct main"
     description:

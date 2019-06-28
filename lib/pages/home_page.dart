@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:como_gasto/add_page_transition.dart';
 import 'package:como_gasto/month_widget.dart';
+import 'package:como_gasto/pages/add_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:rect_getter/rect_getter.dart';
 
 import '../login_state.dart';
 import '../utils.dart';
@@ -13,9 +16,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var globalKey = RectGetter.createGlobalKey();
+  Rect buttonRect;
+
   PageController _controller;
   int currentPage = DateTime.now().month - 1;
   Stream<QuerySnapshot> _query;
+  GraphType currentType = GraphType.LINES;
 
   @override
   void initState() {
@@ -57,22 +64,44 @@ class _HomePageState extends State<HomePage> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              _bottomAction(FontAwesomeIcons.history, () {}),
-              _bottomAction(FontAwesomeIcons.chartPie, () {}),
+              _bottomAction(FontAwesomeIcons.chartLine, () {
+                setState(() {
+                  currentType = GraphType.LINES;
+                });
+              }),
+              _bottomAction(FontAwesomeIcons.chartPie, () {
+                setState(() {
+                  currentType = GraphType.PIE;
+                });
+              }),
               SizedBox(width: 48.0),
               _bottomAction(FontAwesomeIcons.wallet, () {}),
-              _bottomAction(Icons.settings, () {
+              _bottomAction(FontAwesomeIcons.signOutAlt, () {
                 Provider.of<LoginState>(context).logout();
               }),
             ],
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            Navigator.of(context).pushNamed('/add');
-          },
+        floatingActionButton: RectGetter(
+          key: globalKey,
+          child: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () {
+              buttonRect = RectGetter.getRectFromKey(globalKey);
+
+              print(buttonRect);
+
+              var page = AddPageTransition(
+                background: widget,
+                page: AddPage(
+                  buttonRect: buttonRect,
+                ),
+              );
+
+              Navigator.of(context).push(page);
+            },
+          ),
         ),
         body: _body(),
       );
@@ -91,6 +120,8 @@ class _HomePageState extends State<HomePage> {
                 return MonthWidget(
                   days: daysInMonth(currentPage + 1),
                   documents: data.data.documents,
+                  graphType: currentType,
+                  month: currentPage,
                 );
               }
 
