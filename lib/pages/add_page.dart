@@ -33,12 +33,10 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
     );
 
     _buttonAnimation = Tween<double>(begin: 0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn)
-    );
+        CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn));
 
     _pageAnimation = Tween<double>(begin: -1, end: 1.0).animate(
-        CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn)
-    );
+        CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn));
 
     _controller.addListener(() {
       print(_controller.value);
@@ -220,38 +218,39 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
 
   Widget _submit() {
     if (_controller.value < 1) {
-        var buttonWidth = widget.buttonRect.right - widget.buttonRect.left;
-        var w = MediaQuery.of(context).size.width;
+      var buttonWidth = widget.buttonRect.right - widget.buttonRect.left;
+      var w = MediaQuery.of(context).size.width;
 
-        return Positioned(
-          left: widget.buttonRect.left * (1 - _buttonAnimation.value),
-          //<-- Margin from left
-          right: (w - widget.buttonRect.right) * (1 - _buttonAnimation.value),
-          //<-- Margin from right
-          top: widget.buttonRect.top,
-          //<-- Margin from top
-          bottom: (MediaQuery.of(context).size.height - widget.buttonRect.bottom) *
-              (1 - _buttonAnimation.value),
-          //<-- Margin from bottom
-          child: Container(
-            width: double.infinity,
-            //<-- Blue cirle
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                  buttonWidth * (1 - _buttonAnimation.value)),
-              color: Colors.blueAccent,
-            ),
-            child: MaterialButton(
-              child: Text(
-                "Add expense",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
-                ),
+      return Positioned(
+        left: widget.buttonRect.left * (1 - _buttonAnimation.value),
+        //<-- Margin from left
+        right: (w - widget.buttonRect.right) * (1 - _buttonAnimation.value),
+        //<-- Margin from right
+        top: widget.buttonRect.top,
+        //<-- Margin from top
+        bottom:
+            (MediaQuery.of(context).size.height - widget.buttonRect.bottom) *
+                (1 - _buttonAnimation.value),
+        //<-- Margin from bottom
+        child: Container(
+          width: double.infinity,
+          //<-- Blue cirle
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(
+                buttonWidth * (1 - _buttonAnimation.value)),
+            color: Colors.blueAccent,
+          ),
+          child: MaterialButton(
+            child: Text(
+              "Add expense",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
               ),
             ),
           ),
-        );
+        ),
+      );
     } else {
       return Positioned(
         top: widget.buttonRect.top,
@@ -270,6 +269,7 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
                 ),
               ),
               onPressed: () {
+                var today = DateTime.now();
                 var user = Provider.of<LoginState>(context).currentUser();
                 if (value > 0 && category != "") {
                   Firestore.instance
@@ -280,8 +280,9 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
                       .setData({
                     "category": category,
                     "value": value / 100.0,
-                    "month": DateTime.now().month,
-                    "day": DateTime.now().day,
+                    "month": today.month,
+                    "day": today.day,
+                    "year": today.year,
                   });
 
                   Navigator.of(context).pop();
