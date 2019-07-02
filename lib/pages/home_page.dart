@@ -117,12 +117,28 @@ class _HomePageState extends State<HomePage> {
             stream: _query,
             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> data) {
               if (data.hasData) {
-                return MonthWidget(
-                  days: daysInMonth(currentPage + 1),
-                  documents: data.data.documents,
-                  graphType: currentType,
-                  month: currentPage,
-                );
+                if (data.data.documents.length > 0) {
+                  return MonthWidget(
+                    days: daysInMonth(currentPage + 1),
+                    documents: data.data.documents,
+                    graphType: currentType,
+                    month: currentPage,
+                  );
+                } else {
+                  return Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Image.asset('assets/no_data.png'),
+                        SizedBox(height: 80),
+                        Text(
+                          "Add an expense to begin",
+                          style: Theme.of(context).textTheme.caption,
+                        )
+                      ],
+                    ),
+                  );
+                }
               }
 
               return Center(
@@ -183,18 +199,18 @@ class _HomePageState extends State<HomePage> {
         },
         controller: _controller,
         children: <Widget>[
-          _pageItem("Enero", 0),
-          _pageItem("Febrero", 1),
-          _pageItem("Marzo", 2),
-          _pageItem("Abril", 3),
-          _pageItem("Mayo", 4),
-          _pageItem("Junio", 5),
-          _pageItem("Julio", 6),
-          _pageItem("Agosto", 7),
-          _pageItem("Septiembre", 8),
-          _pageItem("Octubre", 9),
-          _pageItem("Noviembre", 10),
-          _pageItem("Diciembre", 11),
+          _pageItem("January", 0),
+          _pageItem("February", 1),
+          _pageItem("March", 2),
+          _pageItem("April", 3),
+          _pageItem("May", 4),
+          _pageItem("June", 5),
+          _pageItem("July", 6),
+          _pageItem("August", 7),
+          _pageItem("September", 8),
+          _pageItem("October", 9),
+          _pageItem("November", 10),
+          _pageItem("December", 11),
         ],
       ),
     );
