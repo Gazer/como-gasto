@@ -39,7 +39,6 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
         CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn));
 
     _controller.addListener(() {
-      print(_controller.value);
       setState(() {});
     });
     _controller.addStatusListener((status) {
@@ -285,7 +284,7 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
                     "year": today.year,
                   });
 
-                  Navigator.of(context).pop();
+                  _controller.reverse();
                 } else {
                   Scaffold.of(context).showSnackBar(SnackBar(
                       content: Text("Select a value and a cagtegory")));

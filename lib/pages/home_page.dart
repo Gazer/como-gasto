@@ -90,16 +90,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               buttonRect = RectGetter.getRectFromKey(globalKey);
 
-              print(buttonRect);
-
-              var page = AddPageTransition(
-                background: widget,
-                page: AddPage(
-                  buttonRect: buttonRect,
-                ),
-              );
-
-              Navigator.of(context).push(page);
+              Navigator.of(context).pushNamed('/add', arguments: buttonRect);
             },
           ),
         ),

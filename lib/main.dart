@@ -22,12 +22,18 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: (settings) {
           if (settings.name == '/details') {
             DetailsParams params = settings.arguments;
-            return MaterialPageRoute(
-              builder: (BuildContext context) {
-                return DetailsPage(
-                  params: params ,
-                );
-              }
+            return MaterialPageRoute(builder: (BuildContext context) {
+              return DetailsPage(
+                params: params,
+              );
+            });
+          } else if (settings.name == '/add') {
+            Rect buttonRect = settings.arguments;
+
+            return AddPageTransition(
+              page: AddPage(
+                buttonRect: buttonRect,
+              ),
             );
           }
         },
@@ -45,5 +51,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
