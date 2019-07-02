@@ -112,6 +112,8 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
           "Alcohol": FontAwesomeIcons.beer,
           "Fast food": FontAwesomeIcons.hamburger,
           "Bills": FontAwesomeIcons.wallet,
+          "Transport": FontAwesomeIcons.carAlt,
+          "Other": FontAwesomeIcons.infinity,
         },
         onValueChanged: (newCategory) => category = newCategory,
       ),
@@ -286,8 +288,20 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
 
                   _controller.reverse();
                 } else {
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text("Select a value and a cagtegory")));
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        content: Text("You need to select a category and a value greater than zero."),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text('Ok'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      )
+                  );
                 }
               },
             ),
