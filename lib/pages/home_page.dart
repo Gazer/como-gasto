@@ -107,7 +107,7 @@ class _HomePageState extends State<HomePage> {
           StreamBuilder<QuerySnapshot>(
             stream: _query,
             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> data) {
-              if (data.hasData) {
+              if (data.connectionState == ConnectionState.active) {
                 if (data.data.documents.length > 0) {
                   return MonthWidget(
                     days: daysInMonth(currentPage + 1),
@@ -132,8 +132,10 @@ class _HomePageState extends State<HomePage> {
                 }
               }
 
-              return Center(
-                child: CircularProgressIndicator(),
+              return Expanded(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
               );
             },
           ),
@@ -177,8 +179,9 @@ class _HomePageState extends State<HomePage> {
       size: Size.fromHeight(70.0),
       child: PageView(
         onPageChanged: (newPage) {
+          var user = Provider.of<LoginState>(context).currentUser();
+
           setState(() {
-            var user = Provider.of<LoginState>(context).currentUser();
             currentPage = newPage;
             _query = Firestore.instance
                 .collection('users')
