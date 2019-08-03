@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:como_gasto/graph_widget.dart';
-import 'package:como_gasto/pages/details_page.dart';
+import 'package:como_gasto/pages/details_page_container.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -99,6 +99,9 @@ class _MonthWidgetState extends State<MonthWidget> {
   }
 
   Widget _item(IconData icon, String name, int percent, double value) {
+    if (name == null) {
+      name = "";
+    }
     return ListTile(
       onTap: () {
         Navigator.of(context).pushNamed("/details",
