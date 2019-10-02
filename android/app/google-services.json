@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "173215752753",
+    "firebase_url": "https://comogastoyt-bf4bb.firebaseio.com",
+    "project_id": "comogastoyt-bf4bb",
+    "storage_bucket": "comogastoyt-bf4bb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:173215752753:android:957bb64f9e6aa927",
+        "android_client_info": {
+          "package_name": "ar.com.p39.como_gasto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "173215752753-9oqdkfcniomj2otlaab0ti4v6gbd0c3m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ar.com.p39.como_gasto",
+            "certificate_hash": "e408700297e4e8f89ebe9b5bd2d851a60213912f"
+          }
+        },
+        {
+          "client_id": "173215752753-sm27hsjfa9bdh4ko0itaf7539r31cl1c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA22xlzsq3xgI2gSocZM5f-AmCblT5X-L4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "173215752753-sm27hsjfa9bdh4ko0itaf7539r31cl1c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "173215752753-sfdf5d19ospsuphvgaclfsie0vp873lb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ar.com.p39.comoGasto"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

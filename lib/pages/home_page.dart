@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:como_gasto/add_page_transition.dart';
 import 'package:como_gasto/month_widget.dart';
-import 'package:como_gasto/pages/add_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rect_getter/rect_getter.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import '../expenses_repository.dart';
 import '../login_state.dart';
 import '../utils.dart';
 
@@ -16,6 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   var globalKey = RectGetter.createGlobalKey();
   Rect buttonRect;
 
@@ -32,6 +33,8 @@ class _HomePageState extends State<HomePage> {
       initialPage: currentPage,
       viewportFraction: 0.4,
     );
+
+    setupNotificationPlugin();
   }
 
   Widget _bottomAction(IconData icon, Function callback) {
@@ -46,15 +49,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LoginState>(
-        builder: (BuildContext context, LoginState state, Widget child) {
-      var user = Provider.of<LoginState>(context).currentUser();
-      _query = Firestore.instance
-          .collection('users')
-          .document(user.uid)
-          .collection('expenses')
-          .where("month", isEqualTo: currentPage + 1)
-          .snapshots();
+    return Consumer<ExpensesRepository>(
+        builder: (BuildContext context, ExpensesRepository db, Widget child) {
+      _query = db.queryByMonth(currentPage + 1);
 
       return Scaffold(
         bottomNavigationBar: BottomAppBar(
@@ -179,16 +176,11 @@ class _HomePageState extends State<HomePage> {
       size: Size.fromHeight(70.0),
       child: PageView(
         onPageChanged: (newPage) {
-          var user = Provider.of<LoginState>(context).currentUser();
+          var db = Provider.of<ExpensesRepository>(context);
 
           setState(() {
             currentPage = newPage;
-            _query = Firestore.instance
-                .collection('users')
-                .document(user.uid)
-                .collection('expenses')
-                .where("month", isEqualTo: currentPage + 1)
-                .snapshots();
+            _query = db.queryByMonth(currentPage + 1);
           });
         },
         controller: _controller,
@@ -208,5 +200,69 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  void setupNotificationPlugin() {
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+
+    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+    var initializationSettingsAndroid =
+        new AndroidInitializationSettings('app_icon');
+    var initializationSettingsIOS = new IOSInitializationSettings(
+      onDidReceiveLocalNotification: onDidReceiveLocalNotification,
+    );
+    var initializationSettings = new InitializationSettings(
+      initializationSettingsAndroid,
+      initializationSettingsIOS,
+    );
+
+    flutterLocalNotificationsPlugin
+        .initialize(
+      initializationSettings,
+      onSelectNotification: onSelectNotification,
+    )
+        .then((init) {
+      setupNotification();
+    });
+  }
+
+  Future onSelectNotification(String payload) async {
+    if (payload != null) {
+      debugPrint('notification payload: ' + payload);
+    }
+    await Navigator.push(
+      context,
+      new MaterialPageRoute(builder: (context) => HomePage()),
+    );
+  }
+
+  Future onDidReceiveLocalNotification(
+      int id, String title, String body, String payload) async {
+    // display a dialog with the notification details, tap ok to go to another page
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              content: Text("Don't forget to add your expenses"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Ok'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ));
+  }
+
+  void setupNotification() async {
+    var time = new Time(16, 11, 0);
+    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+        'daily-notifications', 'Daily Notifications', 'Daily Notifications');
+    var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+    var platformChannelSpecifics = new NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.showDailyAtTime(0, 'Spend-o-meter',
+        "Don't forget to add your expenses", time, platformChannelSpecifics);
   }
 }
