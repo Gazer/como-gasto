@@ -1,6 +1,8 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flare_dart/actor.dart';
 
 import '../login_state.dart';
 
@@ -29,7 +31,13 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Padding(
               padding: const EdgeInsets.all(32.0),
-              child: Image.asset('assets/login_background.png'),
+              child: Container(
+                height: 300,
+                child: FlareActor(
+                  "assets/login_background.flr",
+                  animation: "idle",
+                ),
+              ),
             ),
             Text(
               "Your personal finance app",

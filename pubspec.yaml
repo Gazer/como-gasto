@@ -34,6 +34,7 @@ dependencies:
   flutter_launcher_icons: ^0.7.2+1
   flutter_local_notifications: ^0.8.0
   datetime_picker_formfield: ^0.4.0
+  flare_flutter:
 
 dev_dependencies:
   flutter_test:
