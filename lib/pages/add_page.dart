@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:como_gasto/category_selection_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../expenses_repository.dart';
@@ -24,6 +27,8 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
 
   String dateStr = "hoy";
   DateTime date = DateTime.now();
+
+  File _selectedPicture;
 
   @override
   void initState() {
@@ -64,41 +69,50 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
           offset: Offset(0, h * (1 - _pageAnimation.value)),
           child: Scaffold(
             appBar: AppBar(
-              automaticallyImplyLeading: false,
+              leading: BackButton(
+                color: Colors.grey,
+                onPressed: () {
+                  _controller.reverse();
+                },
+              ),
               backgroundColor: Colors.transparent,
               elevation: 0.0,
-              title: GestureDetector(
-                onTap: () {
-                  showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime.now().subtract(Duration(hours: 24*30)),
-                    lastDate: DateTime.now(),
-                  ).then((newDate) {
-                    if (newDate != null) {
-                      setState(() {
-                        date = newDate;
-                        dateStr = "${date.year.toString()}-${date.month.toString().padLeft(2,'0')}-${date.day.toString().padLeft(2,'0')}";
-                      });
-                    }
-                  });
-                },
-                child: Text(
-                  "Category ($dateStr)",
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
+              title: Text(
+                "Category ($dateStr)",
+                style: TextStyle(
+                  color: Colors.grey,
                 ),
               ),
               centerTitle: false,
               actions: <Widget>[
                 IconButton(
-                  icon: Icon(
-                    Icons.close,
-                    color: Colors.grey,
-                  ),
+                  icon: Icon(Icons.calendar_today),
+                  color: Colors.grey,
                   onPressed: () {
-                    _controller.reverse();
+                    showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now().subtract(Duration(hours: 24*30)),
+                      lastDate: DateTime.now(),
+                    ).then((newDate) {
+                      if (newDate != null) {
+                        setState(() {
+                          date = newDate;
+                          dateStr = "${date.year.toString()}-${date.month.toString().padLeft(2,'0')}-${date.day.toString().padLeft(2,'0')}";
+                        });
+                      }
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.camera_alt),
+                  color: Colors.grey,
+                  onPressed: () async {
+                    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+
+                    setState(() {
+                      _selectedPicture = image;
+                    });
                   },
                 )
               ],
@@ -119,6 +133,11 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
     return Column(
       children: <Widget>[
         _categorySelector(),
+        if (_selectedPicture != null)
+          SizedBox(
+            height: 100,
+            child: Image.file(_selectedPicture),
+          ),
         _currentValue(),
         _numpad(),
         SizedBox(
@@ -303,7 +322,7 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
               onPressed: () {
                 var db = Provider.of<ExpensesRepository>(context);
                 if (value > 0 && category != "") {
-                  db.add(category, value / 100.0, date);
+                  db.add(category, value / 100.0, date, _selectedPicture);
 
                   _controller.reverse();
                 } else {
