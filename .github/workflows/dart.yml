@@ -16,8 +16,6 @@ jobs:
       uses: steebchen/flutter@v1.0.0
       with:
         args: pub get
-    - name: Run tests
-      run: pub run test
     - name: Flutter CLI
       uses: steebchen/flutter@v1.0.0
       with:
