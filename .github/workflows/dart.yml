@@ -18,5 +18,6 @@ jobs:
       run: pub run test
     - name: Flutter CLI
       uses: steebchen/flutter@v1.0.0
-      run: flutter build apk --debug
+      with:
+        args: build apk --debug
 
