@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:local_auth/local_auth.dart';
 
 import '../expenses_repository.dart';
 
@@ -30,9 +31,19 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
 
   File _selectedPicture;
 
+  LocalAuthentication _localAth;
+  bool _isBiometricAvailable = false;
+
   @override
   void initState() {
     super.initState();
+
+    _localAth = LocalAuthentication();
+    _localAth.canCheckBiometrics.then((b) {
+      setState(() {
+        _isBiometricAvailable = b;
+      });
+    });
 
     _controller = AnimationController(
       vsync: this,
@@ -59,17 +70,15 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    var h = MediaQuery
-        .of(context)
-        .size
-        .height;
+    var h = MediaQuery.of(context).size.height;
     return Stack(
       children: [
         Transform.translate(
           offset: Offset(0, h * (1 - _pageAnimation.value)),
           child: Scaffold(
             appBar: AppBar(
-              leading: BackButton(
+              leading: IconButton(
+                icon: BackButtonIcon(),
                 color: Colors.grey,
                 onPressed: () {
                   _controller.reverse();
@@ -92,13 +101,15 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
                     showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime.now().subtract(Duration(hours: 24*30)),
+                      firstDate:
+                          DateTime.now().subtract(Duration(hours: 24 * 30)),
                       lastDate: DateTime.now(),
                     ).then((newDate) {
                       if (newDate != null) {
                         setState(() {
                           date = newDate;
-                          dateStr = "${date.year.toString()}-${date.month.toString().padLeft(2,'0')}-${date.day.toString().padLeft(2,'0')}";
+                          dateStr =
+                              "${date.year.toString()}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
                         });
                       }
                     });
@@ -108,7 +119,8 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
                   icon: Icon(Icons.camera_alt),
                   color: Colors.grey,
                   onPressed: () async {
-                    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+                    var image =
+                        await ImagePicker.pickImage(source: ImageSource.camera);
 
                     setState(() {
                       _selectedPicture = image;
@@ -126,10 +138,7 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
   }
 
   Widget _body() {
-    var h = MediaQuery
-        .of(context)
-        .size
-        .height;
+    var h = MediaQuery.of(context).size.height;
     return Column(
       children: <Widget>[
         _categorySelector(),
@@ -211,63 +220,60 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
     return Expanded(
       child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
-            var height = constraints.biggest.height / 4;
+        var height = constraints.biggest.height / 4;
 
-            return Table(
-              border: TableBorder.all(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              children: [
-                TableRow(children: [
-                  _num("1", height),
-                  _num("2", height),
-                  _num("3", height),
-                ]),
-                TableRow(children: [
-                  _num("4", height),
-                  _num("5", height),
-                  _num("6", height),
-                ]),
-                TableRow(children: [
-                  _num("7", height),
-                  _num("8", height),
-                  _num("9", height),
-                ]),
-                TableRow(children: [
-                  _num(",", height),
-                  _num("0", height),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        value = value ~/ 10;
-                      });
-                    },
-                    child: Container(
-                      height: height,
-                      child: Center(
-                        child: Icon(
-                          Icons.backspace,
-                          color: Colors.grey,
-                          size: 40,
-                        ),
-                      ),
+        return Table(
+          border: TableBorder.all(
+            color: Colors.grey,
+            width: 1.0,
+          ),
+          children: [
+            TableRow(children: [
+              _num("1", height),
+              _num("2", height),
+              _num("3", height),
+            ]),
+            TableRow(children: [
+              _num("4", height),
+              _num("5", height),
+              _num("6", height),
+            ]),
+            TableRow(children: [
+              _num("7", height),
+              _num("8", height),
+              _num("9", height),
+            ]),
+            TableRow(children: [
+              _num(",", height),
+              _num("0", height),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    value = value ~/ 10;
+                  });
+                },
+                child: Container(
+                  height: height,
+                  child: Center(
+                    child: Icon(
+                      Icons.backspace,
+                      color: Colors.grey,
+                      size: 40,
                     ),
                   ),
-                ]),
-              ],
-            );
-          }),
+                ),
+              ),
+            ]),
+          ],
+        );
+      }),
     );
   }
 
   Widget _submit() {
     if (_controller.value < 1) {
       var buttonWidth = widget.buttonRect.right - widget.buttonRect.left;
-      var w = MediaQuery
-          .of(context)
-          .size
-          .width;
+      var w = MediaQuery.of(context).size.width;
 
       return Positioned(
         left: widget.buttonRect.left * (1 - _buttonAnimation.value),
@@ -277,11 +283,8 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
         top: widget.buttonRect.top,
         //<-- Margin from top
         bottom:
-        (MediaQuery
-            .of(context)
-            .size
-            .height - widget.buttonRect.bottom) *
-            (1 - _buttonAnimation.value),
+            (MediaQuery.of(context).size.height - widget.buttonRect.bottom) *
+                (1 - _buttonAnimation.value),
         //<-- Margin from bottom
         child: Container(
           width: double.infinity,
@@ -292,6 +295,7 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
             color: Colors.blueAccent,
           ),
           child: MaterialButton(
+            onPressed: () {},
             child: Text(
               "Add expense",
               style: TextStyle(
@@ -312,24 +316,56 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
           return Container(
             decoration: BoxDecoration(color: Colors.blueAccent),
             child: MaterialButton(
-              child: Text(
-                "Add expense",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "Add expense",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  if (_isBiometricAvailable)
+                    Icon(
+                      Icons.fingerprint,
+                      color: Colors.white,
+                      size: 30.0,
+                    )
+                ],
               ),
-              onPressed: () {
+              onPressed: () async {
                 var db = Provider.of<ExpensesRepository>(context);
                 if (value > 0 && category != "") {
-                  db.add(category, value / 100.0, date, _selectedPicture);
-
-                  _controller.reverse();
+                  if (_isBiometricAvailable) {
+                    bool didAuthenticate = await _localAth.authenticateWithBiometrics(
+                      localizedReason: "Please identify yourself!",
+                    );
+                    if (didAuthenticate) {
+                      _saveAndBack(db);
+                    } else {
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            content: Text(
+                                "You need to identify yourself."),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('Ok'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          ));
+                    }
+                  } else {
+                    _saveAndBack(db);
+                  }
                 } else {
                   showDialog(
                       context: context,
-                      builder: (context) =>
-                          AlertDialog(
+                      builder: (context) => AlertDialog(
                             content: Text(
                                 "You need to select a category and a value greater than zero."),
                             actions: <Widget>[
@@ -340,8 +376,7 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
                                 },
                               ),
                             ],
-                          )
-                  );
+                          ));
                 }
               },
             ),
@@ -349,5 +384,11 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
         }),
       );
     }
+  }
+
+  _saveAndBack(ExpensesRepository db) {
+    db.add(category, value / 100.0, date, _selectedPicture);
+
+    _controller.reverse();
   }
 }
