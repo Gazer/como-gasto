@@ -1,0 +1,23 @@
+name: Dart CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    container:
+      image:  google/dart:latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install dependencies
+      uses: steebchen/flutter@v1.0.0
+      with:
+        args: pub get
+    - name: Flutter CLI
+      uses: steebchen/flutter@v1.0.0
+      with:
+        args: build apk --debug
+
