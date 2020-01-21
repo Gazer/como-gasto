@@ -1,5 +1,6 @@
-import 'package:como_gasto/add_page_transition.dart';
-import 'package:como_gasto/login_state.dart';
+import 'package:como_gasto/others/add_page_transition.dart';
+import 'package:como_gasto/pages/settings_page.dart';
+import 'package:como_gasto/states/login_state.dart';
 import 'package:como_gasto/pages/add_page.dart';
 import 'package:como_gasto/pages/details_page_container.dart';
 import 'package:como_gasto/pages/home_page.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'expenses_repository.dart';
+import 'states/theme_state.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,6 +18,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<ThemeState>(
+          builder: (_) => ThemeState(),
+        ),
         ChangeNotifierProvider<LoginState>(
           builder: (BuildContext context) => LoginState(),
         ),
@@ -30,39 +35,45 @@ class MyApp extends StatelessWidget {
           },
         )
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        onGenerateRoute: (settings) {
-          if (settings.name == '/details') {
-            DetailsParams params = settings.arguments;
-            return MaterialPageRoute(builder: (BuildContext context) {
-              return DetailsPageContainer(
-                params: params,
-              );
-            });
-          } else if (settings.name == '/add') {
-            Rect buttonRect = settings.arguments;
+      child: Consumer<ThemeState>(
+        builder: (context, state, child) {
+          return MaterialApp(
+            title: 'Flutter Demo',
+            theme: state.currentTheme,
+            onGenerateRoute: (settings) {
+              if (settings.name == '/details') {
+                DetailsParams params = settings.arguments;
+                return MaterialPageRoute(builder: (BuildContext context) {
+                  return DetailsPageContainer(
+                    params: params,
+                  );
+                });
+              } else if (settings.name == '/add') {
+                Rect buttonRect = settings.arguments;
 
-            return AddPageTransition(
-              page: AddPage(
-                buttonRect: buttonRect,
-              ),
-            );
-          }
-          return null;
-        },
-        routes: {
-          '/': (BuildContext context) {
-            var state = Provider.of<LoginState>(context);
-            if (state.isLoggedIn()) {
-              return HomePage();
-            } else {
-              return LoginPage();
-            }
-          },
+                return AddPageTransition(
+                  page: AddPage(
+                    buttonRect: buttonRect,
+                  ),
+                );
+              } else if (settings.name == '/settings') {
+                return MaterialPageRoute(builder: (BuildContext context) {
+                  return SettingsPage();
+                });
+              }
+              return null;
+            },
+            routes: {
+              '/': (BuildContext context) {
+                var state = Provider.of<LoginState>(context);
+                if (state.isLoggedIn()) {
+                  return HomePage();
+                } else {
+                  return LoginPage();
+                }
+              },
+            },
+          );
         },
       ),
     );

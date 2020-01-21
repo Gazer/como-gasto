@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:como_gasto/category_selection_widget.dart';
+import 'package:como_gasto/others/category_selection_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -292,7 +292,7 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(
                 buttonWidth * (1 - _buttonAnimation.value)),
-            color: Colors.blueAccent,
+            color: Theme.of(context).floatingActionButtonTheme.backgroundColor ?? Theme.of(context).primaryColor,
           ),
           child: MaterialButton(
             onPressed: () {},
@@ -314,7 +314,7 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
         right: 0,
         child: Builder(builder: (BuildContext context) {
           return Container(
-            decoration: BoxDecoration(color: Colors.blueAccent),
+            decoration: BoxDecoration(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ?? Theme.of(context).primaryColor),
             child: MaterialButton(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

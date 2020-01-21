@@ -1,9 +1,10 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../login_state.dart';
+import '../states/login_state.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -54,11 +55,34 @@ class _LoginPageState extends State<LoginPage> {
                   return child;
                 }
               },
-              child: RaisedButton(
-                child: Text("Sign in with Google"),
-                onPressed: () {
-                  Provider.of<LoginState>(context).login();
-                },
+              child: Container(
+                width: 200,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    FloatingActionButton(
+                      backgroundColor: Color(0xff4285F4),
+                      child: Icon(FontAwesomeIcons.google),
+                      onPressed: () {
+                        Provider.of<LoginState>(context).login(LoginProvider.GOOGLE);
+                      },
+                    ),
+                    FloatingActionButton(
+                      backgroundColor: Color(0xff00aced),
+                      child: Icon(FontAwesomeIcons.twitter),
+                      onPressed: () {
+                        Provider.of<LoginState>(context).login(LoginProvider.TWITTER);
+                      },
+                    ),
+                    FloatingActionButton(
+                      backgroundColor: Color(0xff3b5998),
+                      child: Icon(FontAwesomeIcons.facebook),
+                      onPressed: () {
+                        Provider.of<LoginState>(context).login(LoginProvider.FACEBOOK);
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
             Expanded(

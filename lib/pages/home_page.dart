@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:como_gasto/month_widget.dart';
+import 'package:como_gasto/others/month_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +7,7 @@ import 'package:rect_getter/rect_getter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../expenses_repository.dart';
-import '../login_state.dart';
+import '../states/login_state.dart';
 import '../utils.dart';
 
 class HomePage extends StatefulWidget {
@@ -73,8 +73,9 @@ class _HomePageState extends State<HomePage> {
               }),
               SizedBox(width: 48.0),
               _bottomAction(FontAwesomeIcons.wallet, () {}),
-              _bottomAction(FontAwesomeIcons.signOutAlt, () {
-                Provider.of<LoginState>(context).logout();
+              _bottomAction(Icons.settings, () {
+
+                Navigator.pushNamed(context, '/settings');
               }),
             ],
           ),
