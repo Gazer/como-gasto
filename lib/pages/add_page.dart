@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:local_auth/local_auth.dart';
 
+import '../como_gasto_icons.dart';
 import '../expenses_repository.dart';
 
 class AddPage extends StatefulWidget {
@@ -95,7 +96,7 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
               centerTitle: false,
               actions: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.calendar_today),
+                  icon: Icon(ComoGastoIcons.calendar),
                   color: Colors.grey,
                   onPressed: () {
                     showDatePicker(
@@ -116,7 +117,7 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.camera_alt),
+                  icon: Icon(ComoGastoIcons.camera),
                   color: Colors.grey,
                   onPressed: () async {
                     var image =

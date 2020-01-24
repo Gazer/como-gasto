@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:como_gasto/como_gasto_icons.dart';
 import 'package:como_gasto/others/month_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -61,19 +62,19 @@ class _HomePageState extends State<HomePage> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              _bottomAction(FontAwesomeIcons.chartLine, () {
+              _bottomAction(ComoGastoIcons.stats_bars, () {
                 setState(() {
                   currentType = GraphType.LINES;
                 });
               }),
-              _bottomAction(FontAwesomeIcons.chartPie, () {
+              _bottomAction(ComoGastoIcons.pie_chart, () {
                 setState(() {
                   currentType = GraphType.PIE;
                 });
               }),
               SizedBox(width: 48.0),
-              _bottomAction(FontAwesomeIcons.wallet, () {}),
-              _bottomAction(Icons.settings, () {
+              _bottomAction(ComoGastoIcons.cart, () {}),
+              _bottomAction(ComoGastoIcons.settings, () {
 
                 Navigator.pushNamed(context, '/settings');
               }),
@@ -84,7 +85,7 @@ class _HomePageState extends State<HomePage> {
         floatingActionButton: RectGetter(
           key: globalKey,
           child: FloatingActionButton(
-            child: Icon(Icons.add),
+            child: Icon(ComoGastoIcons.plus),
             onPressed: () {
               buttonRect = RectGetter.getRectFromKey(globalKey);
 
