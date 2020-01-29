@@ -19,7 +19,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  charts_flutter: ^0.6.0
+  flutter_localizations:
+    sdk: flutter
+  flutter_cupertino_localizations: ^1.0.1
+  charts_flutter: ^0.8.1
   font_awesome_flutter: ^8.4.0
   cloud_firestore: ^0.13.0+1
   firebase_storage: ^3.0.8
@@ -39,8 +42,9 @@ dependencies:
   rect_getter: ^0.0.1
   flutter_launcher_icons: ^0.7.2+1
   flutter_local_notifications: ^0.8.0
-  datetime_picker_formfield: ^0.4.0
+  datetime_picker_formfield: ^1.0.0
   flare_flutter:
+  yaml: ^2.2.0
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +70,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - lang/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

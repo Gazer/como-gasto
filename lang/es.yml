@@ -1,0 +1,31 @@
+home:
+  emptyList: Agregue un gasto para comenzar
+add:
+  category: Categoría
+  today: Hoy
+  categories:
+    - Compras
+    - Alcohol
+    - Comida Rápida
+    - Facturas
+    - Transporte
+    - Otros
+  currency: $
+  add: Agregar Gasto
+settings:
+  title: Opciones
+  dark_mode: Usar modo oscuro?
+  signout: Salir
+months:
+  jan: Enero
+  feb: Febrero
+  mar: Marzo
+  apr: Abril
+  may: Mayo
+  jun: Junio
+  jul: Julio
+  aug: Agosto
+  sep: Septiembre
+  oct: Octubre
+  nov: Noviembre
+  dec: Diciembre

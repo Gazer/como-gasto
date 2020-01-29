@@ -6,8 +6,10 @@ import 'package:como_gasto/pages/details_page_container.dart';
 import 'package:como_gasto/pages/home_page.dart';
 import 'package:como_gasto/pages/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
+import 'como_gasto_localizations.dart';
 import 'expenses_repository.dart';
 import 'states/theme_state.dart';
 
@@ -73,6 +75,16 @@ class MyApp extends StatelessWidget {
                 }
               },
             },
+            supportedLocales: [
+              Locale('en'),
+              Locale('es'),
+            ],
+            localizationsDelegates: [
+              ComoGastoLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
           );
         },
       ),

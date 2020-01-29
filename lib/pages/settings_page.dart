@@ -1,3 +1,4 @@
+import 'package:como_gasto/como_gasto_localizations.dart';
 import 'package:como_gasto/states/theme_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,9 +6,10 @@ import 'package:provider/provider.dart';
 class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ComoGastoLocalizations localizations = ComoGastoLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Settings"),
+        title: Text(localizations.t('settings.title')),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -20,7 +22,7 @@ class SettingsPage extends StatelessWidget {
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     Expanded(
-                      child: Text("Use Dark mode?"),
+                      child: Text(localizations.t('settings.dark_mode')),
                     ),
                     Switch(
                       value: state.isDarkModeEnabled,
@@ -41,7 +43,7 @@ class SettingsPage extends StatelessWidget {
                 onPressed: () {
                   //Provider.of<LoginState>(context).logout();
                 },
-                child: Text("Sign Out"),
+                child: Text(localizations.t('settings.signout')),
               ),
             )
           ],

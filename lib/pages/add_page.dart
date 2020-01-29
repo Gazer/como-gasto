@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:como_gasto/como_gasto_localizations.dart';
 import 'package:como_gasto/others/category_selection_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:yaml/yaml.dart';
 
 import '../como_gasto_icons.dart';
 import '../expenses_repository.dart';
@@ -27,7 +29,7 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
   String category;
   int value = 0;
 
-  String dateStr = "hoy";
+  String dateStr = null;
   DateTime date = DateTime.now();
 
   File _selectedPicture;
@@ -71,6 +73,11 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    ComoGastoLocalizations localizations = ComoGastoLocalizations.of(context);
+    if (dateStr == null) {
+      dateStr = localizations.t('add.today');
+    }
+
     var h = MediaQuery.of(context).size.height;
     return Stack(
       children: [
@@ -88,7 +95,7 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
               backgroundColor: Colors.transparent,
               elevation: 0.0,
               title: Text(
-                "Category ($dateStr)",
+                "${localizations.t('add.category')} ($dateStr)",
                 style: TextStyle(
                   color: Colors.grey,
                 ),
@@ -130,25 +137,25 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
                 )
               ],
             ),
-            body: _body(),
+            body: _body(localizations),
           ),
         ),
-        _submit(),
+        _submit(localizations),
       ],
     );
   }
 
-  Widget _body() {
+  Widget _body(ComoGastoLocalizations localizations) {
     var h = MediaQuery.of(context).size.height;
     return Column(
       children: <Widget>[
-        _categorySelector(),
+        _categorySelector(localizations),
         if (_selectedPicture != null)
           SizedBox(
             height: 100,
             child: Image.file(_selectedPicture),
           ),
-        _currentValue(),
+        _currentValue(localizations),
         _numpad(),
         SizedBox(
           height: h - widget.buttonRect.top,
@@ -157,30 +164,33 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget _categorySelector() {
+  Widget _categorySelector(ComoGastoLocalizations localizations) {
+    YamlList categories = localizations.t('add.categories');
+    print(categories);
+
     return Container(
       height: 80.0,
       child: CategorySelectionWidget(
         categories: {
-          "Shopping": Icons.shopping_cart,
-          "Alcohol": FontAwesomeIcons.beer,
-          "Fast food": FontAwesomeIcons.hamburger,
-          "Bills": FontAwesomeIcons.wallet,
-          "Transport": FontAwesomeIcons.carAlt,
-          "Other": FontAwesomeIcons.infinity,
+          categories[0]: Icons.shopping_cart,
+          categories[1]: FontAwesomeIcons.beer,
+          categories[2]: FontAwesomeIcons.hamburger,
+          categories[3]: FontAwesomeIcons.wallet,
+          categories[4]: FontAwesomeIcons.carAlt,
+          categories[5]: FontAwesomeIcons.infinity,
         },
         onValueChanged: (newCategory) => category = newCategory,
       ),
     );
   }
 
-  Widget _currentValue() {
+  Widget _currentValue(ComoGastoLocalizations localizations) {
     var realValue = value / 100.0;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 32.0),
       child: Text(
-        "\$${realValue.toStringAsFixed(2)}",
+        "${localizations.t('add.currency')}${realValue.toStringAsFixed(2)}",
         style: TextStyle(
           fontSize: 50.0,
           color: Colors.blueAccent,
@@ -271,7 +281,7 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget _submit() {
+  Widget _submit(ComoGastoLocalizations localizations) {
     if (_controller.value < 1) {
       var buttonWidth = widget.buttonRect.right - widget.buttonRect.left;
       var w = MediaQuery.of(context).size.width;
@@ -298,7 +308,7 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
           child: MaterialButton(
             onPressed: () {},
             child: Text(
-              "Add expense",
+              localizations.t("add.add"),
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20.0,
@@ -321,7 +331,7 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Add expense",
+                    localizations.t("add.add"),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20.0,

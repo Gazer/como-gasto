@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:como_gasto/como_gasto_icons.dart';
+import 'package:como_gasto/como_gasto_localizations.dart';
 import 'package:como_gasto/others/month_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -99,10 +100,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _body() {
+    ComoGastoLocalizations localizations = Localizations.of<ComoGastoLocalizations>(context, ComoGastoLocalizations);
     return SafeArea(
       child: Column(
         children: <Widget>[
-          _selector(),
+          _selector(localizations),
           StreamBuilder<QuerySnapshot>(
             stream: _query,
             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> data) {
@@ -122,7 +124,7 @@ class _HomePageState extends State<HomePage> {
                         Image.asset('assets/no_data.png'),
                         SizedBox(height: 80),
                         Text(
-                          "Add an expense to begin",
+                          localizations.t('home.emptyList'),
                           style: Theme.of(context).textTheme.caption,
                         )
                       ],
@@ -173,7 +175,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _selector() {
+  Widget _selector(ComoGastoLocalizations localizations) {
     return SizedBox.fromSize(
       size: Size.fromHeight(70.0),
       child: PageView(
@@ -187,18 +189,18 @@ class _HomePageState extends State<HomePage> {
         },
         controller: _controller,
         children: <Widget>[
-          _pageItem("January", 0),
-          _pageItem("February", 1),
-          _pageItem("March", 2),
-          _pageItem("April", 3),
-          _pageItem("May", 4),
-          _pageItem("June", 5),
-          _pageItem("July", 6),
-          _pageItem("August", 7),
-          _pageItem("September", 8),
-          _pageItem("October", 9),
-          _pageItem("November", 10),
-          _pageItem("December", 11),
+          _pageItem(localizations.t("months.jan"), 0),
+          _pageItem(localizations.t("months.feb"), 1),
+          _pageItem(localizations.t("months.mar"), 2),
+          _pageItem(localizations.t("months.apr"), 3),
+          _pageItem(localizations.t("months.may"), 4),
+          _pageItem(localizations.t("months.jun"), 5),
+          _pageItem(localizations.t("months.jul"), 6),
+          _pageItem(localizations.t("months.aug"), 7),
+          _pageItem(localizations.t("months.sep"), 8),
+          _pageItem(localizations.t("months.oct"), 9),
+          _pageItem(localizations.t("months.nov"), 10),
+          _pageItem(localizations.t("months.dec"), 11),
         ],
       ),
     );

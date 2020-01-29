@@ -1,0 +1,31 @@
+home:
+  emptyList: Add an expense to begin
+add:
+  category: Category
+  today: Today
+  categories:
+    - Shoppint
+    - Alcohol
+    - Fast food
+    - Bills
+    - Transport
+    - Other
+  currency: $
+  add: Add expense
+settings:
+  title: Settings
+  dark_mode: Use dark mode?
+  signout: Sign Out
+months:
+  jan: January
+  feb: February
+  mar: March
+  apr: April
+  may: May
+  jun: June
+  jul: July
+  aug: August
+  sep: September
+  oct: October
+  nov: November
+  dec: December
