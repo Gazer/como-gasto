@@ -16,11 +16,8 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Container(),
-            ),
             Text(
               localizations.t('login.title'),
               style: Theme.of(context).textTheme.display1,
@@ -38,10 +35,6 @@ class LoginPage extends StatelessWidget {
             Text(
               localizations.t('login.subtitle'),
               style: Theme.of(context).textTheme.caption,
-            ),
-            Expanded(
-              flex: 1,
-              child: Container(),
             ),
             Consumer<LoginState>(
               builder: (BuildContext context, LoginState value, Widget child) {
@@ -75,9 +68,6 @@ class LoginPage extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-            Expanded(
-              child: Container(),
             ),
             Padding(
               padding: const EdgeInsets.all(32.0),
