@@ -31,7 +31,7 @@ class DayExpenseListTile extends StatelessWidget {
       ),
       title: Container(
         decoration: BoxDecoration(
-          color: Colors.blueAccent.withOpacity(0.2),
+          color: Theme.of(context).primaryColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(5.0),
         ),
         child: Padding(
@@ -39,7 +39,7 @@ class DayExpenseListTile extends StatelessWidget {
           child: Text(
             "\$${document["value"]}",
             style: TextStyle(
-              color: Colors.blueAccent,
+              color: Theme.of(context).primaryColor,
               fontWeight: FontWeight.w500,
               fontSize: 16.0,
             ),

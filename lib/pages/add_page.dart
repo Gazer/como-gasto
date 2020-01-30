@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:yaml/yaml.dart';
+import 'dart:io' show Platform;
 
 import '../como_gasto_icons.dart';
 import '../expenses_repository.dart';
@@ -29,7 +30,7 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
   String category;
   int value = 0;
 
-  String dateStr = null;
+  String dateStr;
   DateTime date = DateTime.now();
 
   File _selectedPicture;
@@ -42,9 +43,12 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
     super.initState();
 
     _localAth = LocalAuthentication();
-    _localAth.canCheckBiometrics.then((b) {
+    _localAth.canCheckBiometrics.then((b) async {
+      var methods = await _localAth.getAvailableBiometrics();
+      var hasFingerprint = Platform.isIOS ? methods.any((m) => m == BiometricType.fingerprint) : true;
+
       setState(() {
-        _isBiometricAvailable = b;
+        _isBiometricAvailable = b && hasFingerprint;
       });
     });
 
@@ -193,7 +197,7 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
         "${localizations.t('add.currency')}${realValue.toStringAsFixed(2)}",
         style: TextStyle(
           fontSize: 50.0,
-          color: Colors.blueAccent,
+          color: Theme.of(context).textTheme.title.color,
           fontWeight: FontWeight.w500,
         ),
       ),

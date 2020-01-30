@@ -15,12 +15,20 @@ class ThemeState with ChangeNotifier {
           ),
           toggleableActiveColor: Colors.red,
         )
-      : ThemeData.light();
+      : _getThemeLight();
 
   bool get isDarkModeEnabled => _isDarkModeEnabled;
 
   void setDarkMode(bool b) {
     _isDarkModeEnabled = b;
     notifyListeners();
+  }
+
+  ThemeData _getThemeLight() {
+    final theme = ThemeData(
+      primarySwatch: Colors.deepPurple,
+    );
+
+    return theme;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:como_gasto/como_gasto_localizations.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    ComoGastoLocalizations localizations = ComoGastoLocalizations.of(context);
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -26,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Container(),
             ),
             Text(
-              "Spend-o-meter",
+              localizations.t('login.title'),
               style: Theme.of(context).textTheme.display1,
             ),
             Padding(
@@ -40,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             Text(
-              "Your personal finance app",
+              localizations.t('login.subtitle'),
               style: Theme.of(context).textTheme.caption,
             ),
             Expanded(
@@ -94,19 +97,19 @@ class _LoginPageState extends State<LoginPage> {
                 textAlign: TextAlign.center,
                 text: TextSpan(
                     style: Theme.of(context).textTheme.body1,
-                    text: "To use this app you need to agree to our ",
+                    text: localizations.t('login.notice.line1'),
                     children: [
                       TextSpan(
-                        text: "Terms of Service",
+                        text: localizations.t('login.notice.line2'),
                         recognizer: _recognizer1,
                         style: Theme.of(context)
                             .textTheme
                             .body1
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
-                      TextSpan(text: " and "),
+                      TextSpan(text: localizations.t('login.notice.line3')),
                       TextSpan(
-                        text: "Privacy Policy",
+                        text: localizations.t('login.notice.line4'),
                         recognizer: _recognizer2,
                         style: Theme.of(context)
                             .textTheme
@@ -128,16 +131,11 @@ class _LoginPageState extends State<LoginPage> {
 
     _recognizer1 = TapGestureRecognizer()
       ..onTap = () {
-        showHelp(
-            "This service is provided AS IS and has no current warranty on how the"
-            " data and uptime is managed. The final terms will be released when the final version of the app"
-            " will be released.");
+        showHelp(_getTranslatedString('login.help.terms'));
       };
     _recognizer2 = TapGestureRecognizer()
       ..onTap = () {
-        showHelp(
-            "All your data is saved anonymously on Firebase Firestore database and will be remain that way."
-            " no other users will have access to it.");
+        showHelp(_getTranslatedString('login.help.privacy'));
       };
   }
 
@@ -146,6 +144,10 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
     _recognizer1.dispose();
     _recognizer2.dispose();
+  }
+
+  String _getTranslatedString(String key) {
+    return ComoGastoLocalizations.of(context).t(key);
   }
 
   void showHelp(String s) {

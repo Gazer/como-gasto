@@ -1,4 +1,5 @@
 import 'package:como_gasto/como_gasto_localizations.dart';
+import 'package:como_gasto/states/login_state.dart';
 import 'package:como_gasto/states/theme_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +42,8 @@ class SettingsPage extends StatelessWidget {
               width: double.infinity,
               child: RaisedButton(
                 onPressed: () {
-                  //Provider.of<LoginState>(context).logout();
+                  Provider.of<LoginState>(context).logout();
+                  Navigator.of(context).pop();
                 },
                 child: Text(localizations.t('settings.signout')),
               ),

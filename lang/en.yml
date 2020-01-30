@@ -1,5 +1,21 @@
 home:
   emptyList: Add an expense to begin
+login:
+  title: Spend-o-meter
+  subtitle: Your personal finance app
+  notice:
+    line1: "To use this app you need to agree to our "
+    line2: "Terms of Service"
+    line3: " and "
+    line4: "Privacy Policy"
+  help:
+    terms: >
+      This service is provided AS IS and has no current warranty on how the
+      data and uptime is managed. The final terms will be released when the final version of the app
+      will be released.
+    privacy: >
+      All your data is saved anonymously on Firebase Firestore database and will be remain that way.
+      no other users will have access to it.
 add:
   category: Category
   today: Today

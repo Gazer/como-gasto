@@ -12,40 +12,32 @@ class DetailsParams {
   DetailsParams(this.categoryName, this.month);
 }
 
-class DetailsPageContainer extends StatefulWidget {
+class DetailsPageContainer extends StatelessWidget {
   final DetailsParams params;
 
   const DetailsPageContainer({Key key, this.params}) : super(key: key);
 
   @override
-  _DetailsPageContainerState createState() => _DetailsPageContainerState();
-}
-
-class _DetailsPageContainerState extends State<DetailsPageContainer> {
-  @override
   Widget build(BuildContext context) {
-    return Consumer<ExpensesRepository>(
-      builder: (BuildContext context, ExpensesRepository db, Widget child) {
-        var _query = db.queryByCategory(
-            widget.params.month + 1, widget.params.categoryName);
+    final db = Provider.of<ExpensesRepository>(context);
+    final query = db.queryByCategory(params.month + 1, params.categoryName);
 
-        return StreamBuilder<QuerySnapshot>(
-            stream: _query,
-            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> data) {
-              if (data.hasData) {
-                return DetailsPage(
-                  categoryName: widget.params.categoryName,
-                  documents: data.data.documents,
-                  onDelete: (documentId) {
-                    db.delete(documentId);
-                  },
-                );
-              }
+    return StreamBuilder<QuerySnapshot>(
+      stream: query,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> data) {
+        if (data.hasData) {
+          return DetailsPage(
+            categoryName: params.categoryName,
+            documents: data.data.documents,
+            onDelete: (documentId) {
+              db.delete(documentId);
+            },
+          );
+        }
 
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            });
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       },
     );
   }

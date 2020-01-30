@@ -122,14 +122,14 @@ class _MonthWidgetState extends State<MonthWidget> {
       ),
       trailing: Container(
         decoration: BoxDecoration(
-          color: Colors.blueAccent.withOpacity(0.2),
+          color: Theme.of(context).primaryColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(5.0),
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text("\$$value",
             style: TextStyle(
-              color: Colors.blueAccent,
+              color: Theme.of(context).primaryColor,
               fontWeight: FontWeight.w500,
               fontSize: 16.0,
             ),
