@@ -63,26 +63,21 @@ class _LoginPageState extends State<LoginPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    SocialLoginWidget(
+                      backgroundColor: Color(0xff00aced),
+                      iconData: FontAwesomeIcons.twitter,
+                    ),
                     FloatingActionButton(
                       backgroundColor: Color(0xff4285F4),
                       child: Icon(FontAwesomeIcons.google),
                       onPressed: () {
-                        Provider.of<LoginState>(context).login(LoginProvider.GOOGLE);
+                        Provider.of<LoginState>(context)
+                            .login(LoginProvider.GOOGLE);
                       },
                     ),
-                    FloatingActionButton(
-                      backgroundColor: Color(0xff00aced),
-                      child: Icon(FontAwesomeIcons.twitter),
-                      onPressed: () {
-                        Provider.of<LoginState>(context).login(LoginProvider.TWITTER);
-                      },
-                    ),
-                    FloatingActionButton(
+                    SocialLoginWidget(
                       backgroundColor: Color(0xff3b5998),
-                      child: Icon(FontAwesomeIcons.facebook),
-                      onPressed: () {
-                        Provider.of<LoginState>(context).login(LoginProvider.FACEBOOK);
-                      },
+                      iconData: FontAwesomeIcons.facebook,
                     ),
                   ],
                 ),
@@ -164,5 +159,33 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ],
             ));
+  }
+}
+
+class SocialLoginWidget extends StatelessWidget {
+  final Color backgroundColor;
+  final IconData iconData;
+
+  const SocialLoginWidget({
+    Key key,
+    @required this.backgroundColor,
+    @required this.iconData,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      backgroundColor: Colors.grey,
+      child: Icon(
+        iconData,
+        color: Colors.white,
+      ),
+      onPressed: () {
+        // Provider.of<LoginState>(context).login(LoginProvider.FACEBOOK);
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text("Comming soon"),
+        ));
+      },
+    );
   }
 }
