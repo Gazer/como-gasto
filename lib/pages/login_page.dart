@@ -1,21 +1,14 @@
 import 'package:como_gasto/como_gasto_localizations.dart';
 import 'package:flare_flutter/flare_actor.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../states/login_state.dart';
+import 'ui/legal_notice_widget.dart';
+import 'ui/social_login_widget.dart';
 
-class LoginPage extends StatefulWidget {
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  TapGestureRecognizer _recognizer1;
-  TapGestureRecognizer _recognizer2;
-
+class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ComoGastoLocalizations localizations = ComoGastoLocalizations.of(context);
@@ -88,104 +81,11 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Padding(
               padding: const EdgeInsets.all(32.0),
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                    style: Theme.of(context).textTheme.body1,
-                    text: localizations.t('login.notice.line1'),
-                    children: [
-                      TextSpan(
-                        text: localizations.t('login.notice.line2'),
-                        recognizer: _recognizer1,
-                        style: Theme.of(context)
-                            .textTheme
-                            .body1
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(text: localizations.t('login.notice.line3')),
-                      TextSpan(
-                        text: localizations.t('login.notice.line4'),
-                        recognizer: _recognizer2,
-                        style: Theme.of(context)
-                            .textTheme
-                            .body1
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ]),
-              ),
+              child: LegalNoticeWidget(),
             )
           ],
         ),
       ),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _recognizer1 = TapGestureRecognizer()
-      ..onTap = () {
-        showHelp(_getTranslatedString('login.help.terms'));
-      };
-    _recognizer2 = TapGestureRecognizer()
-      ..onTap = () {
-        showHelp(_getTranslatedString('login.help.privacy'));
-      };
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _recognizer1.dispose();
-    _recognizer2.dispose();
-  }
-
-  String _getTranslatedString(String key) {
-    return ComoGastoLocalizations.of(context).t(key);
-  }
-
-  void showHelp(String s) {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              content: Text(s),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('Ok'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ));
-  }
-}
-
-class SocialLoginWidget extends StatelessWidget {
-  final Color backgroundColor;
-  final IconData iconData;
-
-  const SocialLoginWidget({
-    Key key,
-    @required this.backgroundColor,
-    @required this.iconData,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      backgroundColor: Colors.grey,
-      child: Icon(
-        iconData,
-        color: Colors.white,
-      ),
-      onPressed: () {
-        // Provider.of<LoginState>(context).login(LoginProvider.FACEBOOK);
-        Scaffold.of(context).showSnackBar(SnackBar(
-          content: Text("Comming soon"),
-        ));
-      },
     );
   }
 }
