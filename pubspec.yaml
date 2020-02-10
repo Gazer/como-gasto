@@ -45,6 +45,7 @@ dependencies:
   datetime_picker_formfield: ^1.0.0
   flare_flutter:
   yaml: ^2.2.0
+  flutter_hooks: ^0.7.0
 
 dev_dependencies:
   flutter_test:
