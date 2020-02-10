@@ -20,7 +20,10 @@ class LoginPage extends StatelessWidget {
           children: <Widget>[
             Text(
               localizations.t('login.title'),
-              style: Theme.of(context).textTheme.display1,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .display1,
             ),
             Padding(
               padding: const EdgeInsets.all(32.0),
@@ -34,7 +37,10 @@ class LoginPage extends StatelessWidget {
             ),
             Text(
               localizations.t('login.subtitle'),
-              style: Theme.of(context).textTheme.caption,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .caption,
             ),
             Consumer<LoginState>(
               builder: (BuildContext context, LoginState value, Widget child) {
