@@ -1,3 +1,4 @@
+import 'package:como_gasto/auth_providers/auth_provider.dart';
 import 'package:como_gasto/como_gasto_localizations.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';

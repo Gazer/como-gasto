@@ -7,13 +7,19 @@ import 'package:como_gasto/pages/home_page.dart';
 import 'package:como_gasto/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import 'como_gasto_localizations.dart';
 import 'expenses_repository.dart';
 import 'states/theme_state.dart';
+import 'di.dart' as di;
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -24,7 +30,7 @@ class MyApp extends StatelessWidget {
           builder: (_) => ThemeState(),
         ),
         ChangeNotifierProvider<LoginState>(
-          builder: (BuildContext context) => LoginState(),
+          builder: (BuildContext context) => GetIt.instance(),
         ),
         ProxyProvider<LoginState, ExpensesRepository>(
           builder: (_, LoginState value, __) {

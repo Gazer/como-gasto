@@ -3,13 +3,11 @@ import 'package:como_gasto/como_gasto_icons.dart';
 import 'package:como_gasto/como_gasto_localizations.dart';
 import 'package:como_gasto/others/month_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rect_getter/rect_getter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../expenses_repository.dart';
-import '../states/login_state.dart';
 import '../utils.dart';
 
 class HomePage extends StatefulWidget {

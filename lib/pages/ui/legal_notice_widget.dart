@@ -1,6 +1,5 @@
 import 'package:como_gasto/como_gasto_localizations.dart';
 import 'package:como_gasto/hooks/tap_gesture_recognizer_hook.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
