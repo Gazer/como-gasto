@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LoginState with ChangeNotifier {
   FirebaseAuth _auth;
   AuthenticationProvider _authenticationProvider;
+  AuthenticationProviderFactory _authenticationProviderFactory;
 
   SharedPreferences _prefs;
 
@@ -17,9 +18,11 @@ class LoginState with ChangeNotifier {
   LoginState({
     @required SharedPreferences preferences,
     @required FirebaseAuth firebaseAuth,
+    AuthenticationProviderFactory authenticationProviderFactory = const AuthenticationProviderFactory(),
   }) {
     _prefs = preferences;
     _auth = firebaseAuth;
+    _authenticationProviderFactory = authenticationProviderFactory;
     loginState();
   }
 
@@ -29,9 +32,9 @@ class LoginState with ChangeNotifier {
 
   FirebaseUser currentUser() => _user;
 
-  void login(LoginProvider loginProvider) async {
+  Future<void> login(LoginProvider loginProvider) async {
     _authenticationProvider =
-        AuthenticationProvider.createAuthProvider(loginProvider);
+        _authenticationProviderFactory.createAuthProvider(loginProvider);
 
     _loading = true;
     notifyListeners();
@@ -39,11 +42,11 @@ class LoginState with ChangeNotifier {
     var authCredentials = await _authenticationProvider.handleSignIn();
 
     if (authCredentials != null) {
-      final FirebaseUser user = await _auth.signInWithCredential(
+      _user = await _auth.signInWithCredential(
           authCredentials);
 
-      if (user != null) {
-        print("signed in " + user.displayName);
+      if (_user != null) {
+        print("signed in " + _user.displayName);
       }
     }
 

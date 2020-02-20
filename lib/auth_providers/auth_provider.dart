@@ -8,22 +8,26 @@ enum LoginProvider {
   FACEBOOK,
 }
 
-abstract class AuthenticationProvider {
-  Future<AuthCredential> handleSignIn();
-  void logout();
+class AuthenticationProviderFactory {
+  const AuthenticationProviderFactory();
 
-  static AuthenticationProvider createAuthProvider(LoginProvider provider) {
+  AuthenticationProvider createAuthProvider(LoginProvider provider) {
     switch (provider) {
       case LoginProvider.GOOGLE:
         return GoogleAuthenticationProvider();
         break;
       case LoginProvider.TWITTER:
-        // TODO: Handle this case.
+      // TODO: Handle this case.
         break;
       case LoginProvider.FACEBOOK:
-        // TODO: Handle this case.
+      // TODO: Handle this case.
         break;
     }
     return null;
   }
+}
+
+abstract class AuthenticationProvider {
+  Future<AuthCredential> handleSignIn();
+  void logout();
 }
