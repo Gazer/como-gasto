@@ -27,13 +27,13 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ThemeState>(
-          builder: (_) => ThemeState(),
+          create: (_) => ThemeState(),
         ),
         ChangeNotifierProvider<LoginState>(
-          builder: (BuildContext context) => GetIt.instance(),
+          create: (BuildContext context) => GetIt.instance(),
         ),
         ProxyProvider<LoginState, ExpensesRepository>(
-          builder: (_, LoginState value, __) {
+          update: (_, LoginState value, __) {
             if (value.isLoggedIn()) {
               return ExpensesRepository(value
                   .currentUser()
@@ -73,7 +73,7 @@ class MyApp extends StatelessWidget {
             },
             routes: {
               '/': (BuildContext context) {
-                var state = Provider.of<LoginState>(context);
+                var state = Provider.of<LoginState>(context, listen: false);
                 if (state.isLoggedIn()) {
                   return HomePage();
                 } else {

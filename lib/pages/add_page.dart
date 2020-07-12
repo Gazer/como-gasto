@@ -45,7 +45,9 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
     _localAth = LocalAuthentication();
     _localAth.canCheckBiometrics.then((b) async {
       var methods = await _localAth.getAvailableBiometrics();
-      var hasFingerprint = Platform.isIOS ? methods.any((m) => m == BiometricType.fingerprint) : true;
+      var hasFingerprint = Platform.isIOS
+          ? methods.any((m) => m == BiometricType.fingerprint)
+          : true;
 
       setState(() {
         _isBiometricAvailable = b && hasFingerprint;
@@ -307,7 +309,9 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(
                 buttonWidth * (1 - _buttonAnimation.value)),
-            color: Theme.of(context).floatingActionButtonTheme.backgroundColor ?? Theme.of(context).primaryColor,
+            color:
+                Theme.of(context).floatingActionButtonTheme.backgroundColor ??
+                    Theme.of(context).primaryColor,
           ),
           child: MaterialButton(
             onPressed: () {},
@@ -329,7 +333,11 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
         right: 0,
         child: Builder(builder: (BuildContext context) {
           return Container(
-            decoration: BoxDecoration(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ?? Theme.of(context).primaryColor),
+            decoration: BoxDecoration(
+                color: Theme.of(context)
+                        .floatingActionButtonTheme
+                        .backgroundColor ??
+                    Theme.of(context).primaryColor),
             child: MaterialButton(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -350,10 +358,12 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
                 ],
               ),
               onPressed: () async {
-                var db = Provider.of<ExpensesRepository>(context);
+                var db =
+                    Provider.of<ExpensesRepository>(context, listen: false);
                 if (value > 0 && category != "") {
                   if (_isBiometricAvailable) {
-                    bool didAuthenticate = await _localAth.authenticateWithBiometrics(
+                    bool didAuthenticate =
+                        await _localAth.authenticateWithBiometrics(
                       localizedReason: "Please identify yourself!",
                     );
                     if (didAuthenticate) {
@@ -362,17 +372,16 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
                       showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            content: Text(
-                                "You need to identify yourself."),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text('Ok'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          ));
+                                content: Text("You need to identify yourself."),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text('Ok'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              ));
                     }
                   } else {
                     _saveAndBack(db);

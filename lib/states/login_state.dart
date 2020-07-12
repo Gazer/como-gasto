@@ -18,7 +18,8 @@ class LoginState with ChangeNotifier {
   LoginState({
     @required SharedPreferences preferences,
     @required FirebaseAuth firebaseAuth,
-    AuthenticationProviderFactory authenticationProviderFactory = const AuthenticationProviderFactory(),
+    AuthenticationProviderFactory authenticationProviderFactory =
+        const AuthenticationProviderFactory(),
   }) {
     _prefs = preferences;
     _auth = firebaseAuth;
@@ -42,9 +43,10 @@ class LoginState with ChangeNotifier {
     var authCredentials = await _authenticationProvider.handleSignIn();
 
     if (authCredentials != null) {
-      _user = await _auth.signInWithCredential(
-          authCredentials);
-
+      var authResult = await _auth.signInWithCredential(authCredentials);
+      if (authResult != null) {
+        _user = authResult.user;
+      }
       if (_user != null) {
         print("signed in " + _user.displayName);
       }
