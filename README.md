@@ -2,15 +2,17 @@
 
 An app to help to track your expenses
 
+---
+>Made with ❤️ by Ricardo Markiewicz // [@gazeria](https://twitter.com/gazeria).
+
+[![Buy me a coffe at cafecito.app](https://cdn.cafecito.app/imgs/buttons/button_6.svg)](https://cafecito.app/androidedelvalle)
+
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+You need to user Flutter from the Beta channel to use this app now. It supports Flutter mobile and Flutter for Web, that is only available on the beta channel at the moment.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+```sh
+$> flutter channel beta
+$> flutter upgrade
+$> flutter doctor
+```
