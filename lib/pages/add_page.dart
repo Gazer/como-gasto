@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:como_gasto/como_gasto_localizations.dart';
 import 'package:como_gasto/others/category_selection_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -42,17 +43,19 @@ class _AddPageState extends State<AddPage> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    _localAth = LocalAuthentication();
-    _localAth.canCheckBiometrics.then((b) async {
-      var methods = await _localAth.getAvailableBiometrics();
-      var hasFingerprint = Platform.isIOS
-          ? methods.any((m) => m == BiometricType.fingerprint)
-          : true;
+    if (kIsWeb) {
+      _localAth = LocalAuthentication();
+      _localAth.canCheckBiometrics.then((b) async {
+        var methods = await _localAth.getAvailableBiometrics();
+        var hasFingerprint = Platform.isIOS
+            ? methods.any((m) => m == BiometricType.fingerprint)
+            : true;
 
-      setState(() {
-        _isBiometricAvailable = b && hasFingerprint;
+        setState(() {
+          _isBiometricAvailable = b && hasFingerprint;
+        });
       });
-    });
+    }
 
     _controller = AnimationController(
       vsync: this,

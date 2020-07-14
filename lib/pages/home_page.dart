@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:como_gasto/como_gasto_icons.dart';
 import 'package:como_gasto/como_gasto_localizations.dart';
 import 'package:como_gasto/others/month_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rect_getter/rect_getter.dart';
@@ -74,7 +75,6 @@ class _HomePageState extends State<HomePage> {
               SizedBox(width: 48.0),
               _bottomAction(ComoGastoIcons.cart, () {}),
               _bottomAction(ComoGastoIcons.settings, () {
-
                 Navigator.pushNamed(context, '/settings');
               }),
             ],
@@ -98,7 +98,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _body() {
-    ComoGastoLocalizations localizations = Localizations.of<ComoGastoLocalizations>(context, ComoGastoLocalizations);
+    ComoGastoLocalizations localizations =
+        Localizations.of<ComoGastoLocalizations>(
+            context, ComoGastoLocalizations);
     return SafeArea(
       child: Column(
         children: <Widget>[
@@ -205,6 +207,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void setupNotificationPlugin() {
+    if (kIsWeb) {
+      return;
+    }
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
 
     // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project

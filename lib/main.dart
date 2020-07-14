@@ -35,9 +35,7 @@ class MyApp extends StatelessWidget {
         ProxyProvider<LoginState, ExpensesRepository>(
           update: (_, LoginState value, __) {
             if (value.isLoggedIn()) {
-              return ExpensesRepository(value
-                  .currentUser()
-                  .uid);
+              return ExpensesRepository(value.currentUser().uid);
             }
             return null;
           },
@@ -45,53 +43,55 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<ThemeState>(
         builder: (context, state, child) {
-          return MaterialApp(
-            title: 'Flutter Demo',
-            theme: state.currentTheme,
-            onGenerateRoute: (settings) {
-              if (settings.name == '/details') {
-                DetailsParams params = settings.arguments;
-                return MaterialPageRoute(builder: (BuildContext context) {
-                  return DetailsPageContainer(
-                    params: params,
-                  );
-                });
-              } else if (settings.name == '/add') {
-                Rect buttonRect = settings.arguments;
+          return Consumer<LoginState>(
+              builder: (context, loginProvider, child1) {
+            return MaterialApp(
+              title: 'Flutter Demo',
+              theme: state.currentTheme,
+              onGenerateRoute: (settings) {
+                if (settings.name == '/details') {
+                  DetailsParams params = settings.arguments;
+                  return MaterialPageRoute(builder: (BuildContext context) {
+                    return DetailsPageContainer(
+                      params: params,
+                    );
+                  });
+                } else if (settings.name == '/add') {
+                  Rect buttonRect = settings.arguments;
 
-                return AddPageTransition(
-                  page: AddPage(
-                    buttonRect: buttonRect,
-                  ),
-                );
-              } else if (settings.name == '/settings') {
-                return MaterialPageRoute(builder: (BuildContext context) {
-                  return SettingsPage();
-                });
-              }
-              return null;
-            },
-            routes: {
-              '/': (BuildContext context) {
-                var state = Provider.of<LoginState>(context, listen: false);
-                if (state.isLoggedIn()) {
-                  return HomePage();
-                } else {
-                  return LoginPage();
+                  return AddPageTransition(
+                    page: AddPage(
+                      buttonRect: buttonRect,
+                    ),
+                  );
+                } else if (settings.name == '/settings') {
+                  return MaterialPageRoute(builder: (BuildContext context) {
+                    return SettingsPage();
+                  });
                 }
+                return null;
               },
-            },
-            supportedLocales: [
-              Locale('en'),
-              Locale('es'),
-            ],
-            localizationsDelegates: [
-              ComoGastoLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-          );
+              routes: {
+                '/': (BuildContext context) {
+                  if (loginProvider.isLoggedIn()) {
+                    return HomePage();
+                  } else {
+                    return LoginPage();
+                  }
+                },
+              },
+              supportedLocales: [
+                Locale('en'),
+                Locale('es'),
+              ],
+              localizationsDelegates: [
+                ComoGastoLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+            );
+          });
         },
       ),
     );
