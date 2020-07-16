@@ -64,6 +64,7 @@ class LoginState with ChangeNotifier {
       _authenticationProvider.logout();
       _authenticationProvider = null;
     }
+    _auth.signOut();
     _loggedIn = false;
     notifyListeners();
   }
